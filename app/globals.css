@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Luma design system
+   Faithful clone of lu.ma — light, clean, Inter, tight tracking,
+   near-black ink, coral brand accent, generous rounded surfaces.
+   ============================================================ */
+
+@theme {
+  /* Typeface */
+  --font-sans: var(--font-inter), -apple-system, system-ui, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+
+  /* Surface + ink */
+  --color-bg: #f7f8f9;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1f2f4;
+  --color-surface-3: #e8eaed;
+
+  --color-ink: #131517;
+  --color-ink-secondary: #62666d;
+  --color-ink-tertiary: #989ca3;
+  --color-ink-inverse: #ffffff;
+
+  /* Borders / hairlines */
+  --color-line: rgba(19, 21, 23, 0.08);
+  --color-line-strong: rgba(19, 21, 23, 0.14);
+
+  /* Brand — Luma coral-red */
+  --color-brand: #e5484d;
+  --color-brand-hover: #d13b40;
+  --color-brand-soft: #fdecec;
+
+  /* Accent palette used across category chips + cover tints */
+  --color-rose: #f43f8e;
+  --color-orange: #f5821f;
+  --color-amber: #f5a623;
+  --color-green: #2bab6d;
+  --color-teal: #14b8a6;
+  --color-blue: #2f7fed;
+  --color-indigo: #6366f1;
+  --color-purple: #9b5de5;
+
+  /* Radii */
+  --radius-sm: 0.5rem;
+  --radius: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+
+  /* Elevation */
+  --shadow-card: 0 1px 2px rgba(19, 21, 23, 0.04),
+    0 4px 16px rgba(19, 21, 23, 0.05);
+  --shadow-pop: 0 4px 12px rgba(19, 21, 23, 0.08),
+    0 12px 40px rgba(19, 21, 23, 0.12);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.011em;
+  }
+
+  /* Luma headings: medium weight (500), tight negative tracking */
+  h1, h2, h3, h4 {
+    font-weight: 500;
+    letter-spacing: -0.022em;
+    color: var(--color-ink);
+  }
+
+  ::selection {
+    background: rgba(229, 72, 77, 0.18);
+  }
+
+  /* Thin, unobtrusive scrollbars */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(19, 21, 23, 0.16);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(19, 21, 23, 0.28);
+    background-clip: content-box;
+  }
+}
+
+@layer components {
+  /* Frosted nav backdrop used by the marketing + app header */
+  .glass {
+    background: rgba(247, 248, 249, 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+  }
+
+  /* Hero gradient text — the "start here." coral flourish */
+  .text-gradient-brand {
+    background: linear-gradient(96deg, #ff7a59 0%, #e5484d 48%, #f43f8e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Standard card surface */
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+}
+
+@layer utilities {
+  .animate-in {
+    animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(-1deg); }
+  }
+  .animate-float {
+    animation: float-slow 7s ease-in-out infinite;
+  }
+
+  @keyframes spin-slow {
+    to { transform: rotate(360deg); }
+  }
+  .animate-spin-slow { animation: spin-slow 1s linear infinite; }
+}
