@@ -4,6 +4,7 @@ import {
   Leaf,
   Music,
   Palette,
+  Radio,
   Sparkles,
   UtensilsCrossed,
   Wine,
@@ -17,6 +18,13 @@ import { Avatar } from "@/components/ui/avatar";
 import { ButtonLink } from "@/components/ui/button";
 import { listCalendars } from "@/lib/calendars";
 import { listEvents } from "@/lib/events";
+import {
+  getConnectedCalendar,
+  isLumaConnected,
+  listCalendarEvents,
+  lumaEventToCardRow,
+  splitByTime,
+} from "@/lib/luma";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -57,10 +65,14 @@ export default async function DiscoverPage({
   searchParams: Promise<{ category?: string }>;
 }) {
   const { category } = await searchParams;
-  const [events, calendars] = await Promise.all([
+  const connected = isLumaConnected();
+  const [events, calendars, lumaEvents, lumaCal] = await Promise.all([
     listEvents({ when: "upcoming", category, limit: 24 }),
     listCalendars(8),
+    connected ? listCalendarEvents() : Promise.resolve([]),
+    connected ? getConnectedCalendar() : Promise.resolve(null),
   ]);
+  const lumaUpcoming = splitByTime(lumaEvents).upcoming.slice(0, 3);
 
   return (
     <>
@@ -73,6 +85,32 @@ export default async function DiscoverPage({
             Explore popular events near you, browse by category, or find a community to join.
           </p>
         </div>
+
+        {/* Live from the connected Luma calendar */}
+        {!category && lumaUpcoming.length > 0 && (
+          <section className="mb-14">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-soft px-2.5 py-0.5 text-[12px] font-medium text-brand">
+                  <Radio className="h-3 w-3" />
+                  Live from Luma
+                </span>
+                <h2 className="text-xl">{lumaCal?.name ?? "Your calendar"}</h2>
+              </div>
+              <Link href="/calendar" className="text-sm text-ink-secondary hover:text-ink">
+                View all →
+              </Link>
+            </div>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {lumaUpcoming.map((ev) => (
+                <EventCard
+                  key={ev.api_id}
+                  row={lumaEventToCardRow(ev, lumaCal?.name)}
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Popular / filtered events */}
         <section className="mb-14">

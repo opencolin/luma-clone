@@ -11,7 +11,13 @@ import { cn } from "@/lib/utils";
 
 export type NavUser = { id: string; name: string; email: string; avatarUrl: string | null };
 
-export function NavBar({ user }: { user: NavUser | null }) {
+export function NavBar({
+  user,
+  lumaConnected = false,
+}: {
+  user: NavUser | null;
+  lumaConnected?: boolean;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -52,6 +58,7 @@ export function NavBar({ user }: { user: NavUser | null }) {
 
         <div className="ml-auto hidden items-center gap-6 md:flex">
           <Clock className="text-[13px] tabular-nums text-ink-tertiary" />
+          {lumaConnected && navLink("/calendar", "My Calendar")}
           {navLink("/discover", "Explore Events")}
           {user ? (
             <>
@@ -97,6 +104,9 @@ export function NavBar({ user }: { user: NavUser | null }) {
       {menuOpen && (
         <div className="border-t border-line glass px-4 py-4 md:hidden">
           <div className="flex flex-col gap-3">
+            {lumaConnected && (
+              <Link href="/calendar" className="py-1 text-ink-secondary">My Calendar</Link>
+            )}
             <Link href="/discover" className="py-1 text-ink-secondary">Explore Events</Link>
             <Link href="/create" className="py-1 text-ink-secondary">Create Event</Link>
             {user ? (

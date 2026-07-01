@@ -22,7 +22,8 @@ Built to look and feel like the real thing.
 - **Discover** — browse events by category, featured calendars, and cities
 - **My Events dashboard** — events you host and attend, upcoming/past tabs
 - **Passwordless auth** — magic-link style sign in, session cookies
-- **Self-contained** — gorgeous generated covers mean zero external image dependencies
+- **🔴 Live Luma API integration** — connect a real Luma Plus calendar and the app mirrors your actual events, hosts, guests, and covers as a first-party experience
+- **Self-contained** — gorgeous generated covers mean zero external image dependencies (local mode needs no network at all)
 
 ## 🖼️ Screenshots
 
@@ -67,34 +68,53 @@ looks alive immediately.
 | `pnpm db:seed` | Re-seed demo data |
 | `pnpm db:studio` | Open Drizzle Studio |
 
-## 🔌 Connect your real Luma calendar (experimental)
+## 🔌 Connect your real Luma calendar
 
-This project is being wired to the official **[Luma API](https://docs.lu.ma)** so it
-can mirror a real Luma calendar. Set a Luma Plus API key to opt in:
+Set a **[Luma Plus](https://lu.ma/pricing) API key** ([lu.ma/settings/api](https://lu.ma/settings/api))
+and the app connects to the official **[Luma API](https://docs.lu.ma)**:
 
 ```bash
 # .env
 LUMA_API_KEY=secret-xxxxxxxxxxxxxxxxxxxx
 ```
 
-When unset, the app runs entirely on local seed data. _(Live sync is in active
-development — see the roadmap below.)_
+Then a **My Calendar** tab appears in the nav and the app renders your real Luma
+calendar — live events, hosts, guest lists, and cover art — as if it were
+first-party:
+
+| Your connected calendar (`/calendar`) | A live event (`/event/[id]`) |
+|---|---|
+| ![Luma calendar](docs/screenshots/luma-calendar.png) | ![Luma event](docs/screenshots/luma-event.png) |
+
+Registration for live events links out to Luma so nothing is written to your real
+calendar without your intent. When `LUMA_API_KEY` is unset, the app runs entirely
+on local seed data.
+
+How it works: `lib/luma/` wraps the API (`calendar/get`, `calendar/list-events`,
+`event/get`, `event/get-guests`) with ISR caching, and a small adapter maps Luma
+events onto the same view-model the local `EventCard` uses — so one set of
+components renders both sources.
 
 ## 🗺️ Roadmap
 
-- [ ] Live Luma API integration — render a connected calendar's real events
 - [ ] Manage event page — guest list, approve/decline, check-in
-- [ ] Calendar pages with subscribe
-- [ ] RSVP write-back to Luma
+- [ ] Calendar pages with subscribe (local calendars)
+- [ ] Opt-in RSVP write-back to Luma (`event/add-guests`)
+- [ ] Markdown rendering for event descriptions
 
 ## 📁 Project structure
 
 ```
-app/            # routes (home, /discover, /create, /signin, /home, /[slug])
-  actions/      # server actions (registration, events, auth)
+app/            # routes: home, /discover, /create, /signin, /home,
+  [slug]/       #   local event pages
+  calendar/     #   connected Luma calendar (live)
+  event/[id]/   #   live Luma event pages
+  actions/      #   server actions (registration, events, auth)
 components/     # UI primitives + composed components
 db/             # Drizzle schema, migrations, seed
-lib/            # data access, auth/session, date + utility helpers
+lib/            # data access, auth/session, dates, utils
+  luma/         #   Luma API client, types, queries + mappers
+  view.ts       #   shared card view-model (local + Luma feed one card)
 ```
 
 ## 📄 License

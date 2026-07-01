@@ -2,12 +2,12 @@ import { CalendarDays, MapPin, Globe } from "lucide-react";
 import Link from "next/link";
 import { EventCover } from "@/components/event-cover";
 import { Avatar } from "@/components/ui/avatar";
-import type { EventListItem } from "@/lib/events";
+import type { CardRow } from "@/lib/view";
 import { dateTile, formatEventTime, isPast } from "@/lib/dates";
 import { cn } from "@/lib/utils";
 
 /** Vertical event card used in the Discover grid and dashboards. */
-export function EventCard({ row }: { row: EventListItem }) {
+export function EventCard({ row }: { row: CardRow }) {
   const { event, host, calendar, going } = row;
   const tile = dateTile(event.startAt, event.timezone);
   const past = isPast(event.endAt, event.startAt);
