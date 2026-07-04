@@ -21,6 +21,8 @@ Built to look and feel like the real thing.
 - **Create events** — live cover preview with generated gradient covers (8 colors × 5 patterns), location types, free & paid tickets, approval toggle
 - **Discover** — browse events by category, featured calendars, and cities
 - **My Events dashboard** — events you host and attend, upcoming/past tabs
+- **Host tools** — a manage page per event: live stats, searchable guest list, approve/decline requests, and a copy-able invite link
+- **Rich descriptions** — GitHub-flavored markdown rendering for event details
 - **Passwordless auth** — magic-link style sign in, session cookies
 - **🔴 Live Luma API integration** — connect a real Luma Plus calendar and the app mirrors your actual events, hosts, guests, and covers as a first-party experience
 - **Self-contained** — gorgeous generated covers mean zero external image dependencies (local mode needs no network at all)
@@ -97,10 +99,11 @@ components renders both sources.
 
 ## 🗺️ Roadmap
 
-- [ ] Manage event page — guest list, approve/decline, check-in
+- [x] Manage event page — searchable guest list, approve/decline, invite link
+- [x] Markdown rendering for event descriptions
 - [ ] Calendar pages with subscribe (local calendars)
 - [ ] Opt-in RSVP write-back to Luma (`event/add-guests`)
-- [ ] Markdown rendering for event descriptions
+- [ ] Check-in / QR at the door
 
 ## 📁 Project structure
 

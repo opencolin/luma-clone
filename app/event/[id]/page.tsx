@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EventCover } from "@/components/event-cover";
 import { Footer } from "@/components/footer";
+import { Markdown } from "@/components/markdown";
 import { MapBlock } from "@/components/map-block";
 import { SiteNav } from "@/components/site-nav";
 import { Avatar, AvatarStack } from "@/components/ui/avatar";
@@ -166,14 +167,12 @@ export default async function LumaEventPage({ params }: Params) {
               </div>
             </div>
 
-            {ev.description && (
+            {(ev.description_md || ev.description) && (
               <section>
                 <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-ink-tertiary">
                   About Event
                 </h2>
-                <div className="whitespace-pre-line text-[15px] leading-relaxed text-ink/90">
-                  {ev.description}
-                </div>
+                <Markdown>{ev.description_md || ev.description || ""}</Markdown>
               </section>
             )}
 

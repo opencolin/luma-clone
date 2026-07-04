@@ -179,6 +179,35 @@ export async function getEventBySlug(slug: string) {
 
 export type EventDetail = NonNullable<Awaited<ReturnType<typeof getEventBySlug>>>;
 
+/** Host-only: event + full guest list + tickets. Returns null if not the host. */
+export async function getEventForManage(slug: string, userId: string) {
+  const event = await db
+    .select()
+    .from(events)
+    .where(eq(events.slug, slug))
+    .get();
+  if (!event || event.hostId !== userId) return null;
+
+  const [regs, ticketRows] = await Promise.all([
+    db
+      .select()
+      .from(registrations)
+      .where(eq(registrations.eventId, event.id))
+      .orderBy(desc(registrations.createdAt)),
+    db.select().from(tickets).where(eq(tickets.eventId, event.id)),
+  ]);
+
+  const ticketName = new Map(ticketRows.map((t) => [t.id, t.name]));
+  return {
+    event,
+    tickets: ticketRows,
+    registrations: regs.map((r) => ({
+      ...r,
+      ticketName: r.ticketId ? (ticketName.get(r.ticketId) ?? null) : null,
+    })),
+  };
+}
+
 /** Has this email already registered for this event? */
 export async function findRegistration(eventId: string, email: string) {
   return db

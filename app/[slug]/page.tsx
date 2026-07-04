@@ -5,6 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/footer";
 import { EventCover, THEME_STOPS } from "@/components/event-cover";
+import { Markdown } from "@/components/markdown";
 import { MapBlock } from "@/components/map-block";
 import { RegistrationForm } from "@/components/registration-form";
 import { SiteNav } from "@/components/site-nav";
@@ -209,9 +210,7 @@ export default async function EventPage({ params }: Params) {
                 <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-ink-tertiary">
                   About Event
                 </h2>
-                <div className="whitespace-pre-line text-[15px] leading-relaxed text-ink/90">
-                  {event.description}
-                </div>
+                <Markdown>{event.description}</Markdown>
               </section>
             )}
 
