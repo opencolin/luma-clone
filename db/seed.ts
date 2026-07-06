@@ -9,8 +9,8 @@ const db = drizzle(client, { schema });
 
 const DAY = 86_400_000;
 const HOUR = 3_600_000;
-// Anchor near the seed date so demo events look current.
-const NOW = new Date("2026-06-09T12:00:00-07:00").getTime();
+// Anchor to the moment of seeding so demo events are always current.
+const NOW = Date.now();
 const at = (days: number, hour = 18) =>
   new Date(NOW + days * DAY - (new Date(NOW).getHours() - hour) * HOUR);
 
